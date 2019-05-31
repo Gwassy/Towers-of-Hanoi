@@ -7,6 +7,8 @@ public class Disk extends Rectangle {
     private double orgSceneY;
     private double orgTranslateX;
     private double orgTranslateY;
+    private int size;
+
 
     public double getOrgSceneX() {
         return orgSceneX;
@@ -38,5 +40,13 @@ public class Disk extends Rectangle {
 
     public void setOrgTranslateY(double orgTranslateY) {
         this.orgTranslateY = orgTranslateY;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
     }
 }

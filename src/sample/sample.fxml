@@ -25,8 +25,6 @@
                         <Rectangle width="15" height="250"/>
                         <VBox style=" -fx-border-color:yellow; -fx-border-width: 1; -fx-border-style: solid;"
                               alignment="BOTTOM_CENTER">
-                            <!--<Rectangle width="30" height="20" arcWidth="10" arcHeight="10" fill="grey"/>-->
-                            <!--<Rectangle width="60" height="20" arcWidth="10" arcHeight="10" fill="grey"/>-->
                             <Disk width="90" height="20" arcWidth="10" arcHeight="10" fill="grey"
                                   onMousePressed="#setOnMousePressed"
                                   onMouseDragged="#setOnMouseDragged"
@@ -46,7 +44,8 @@
                       style=" -fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;"
                       alignment="CENTER">
 
-                    <StackPane style=" -fx-border-color:blue; -fx-border-width: 1; -fx-border-style: solid;">
+                    <StackPane style=" -fx-border-color:blue; -fx-border-width: 1; -fx-border-style: solid;"
+                               onMouseDragReleased="#setOnMouseDragReleased">
                         <Rectangle width="15" height="250"/>
                         <VBox style=" -fx-border-color:yellow; -fx-border-width: 1; -fx-border-style: solid;"
                               alignment="BOTTOM_CENTER">
