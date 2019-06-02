@@ -108,35 +108,56 @@ public class MainController {
             ObservableList<Node> vBoxChildren = vBox.getChildren();
             Disk currentDisk = model.getCurrentDisk();
 
-            // Create a reference to the disks remaining in the
-            // source VBox
-            VBox sourceVBox = (VBox) currentDisk.getParent();
-            ObservableList<Node> sourceVBoxChildren = sourceVBox.getChildren();
+            if (isDroppingAllowed(currentDisk, vBoxChildren)) {
+                // Create a reference to the disks remaining in the
+                // source VBox
+                VBox sourceVBox = (VBox) currentDisk.getParent();
+                ObservableList<Node> sourceVBoxChildren = sourceVBox.getChildren();
 
 
-            // If there are smaller disks already present on the target rod,
-            // make them undraggable after the current one is added
-            if (!vBoxChildren.isEmpty()) {
-                for (Node node : vBoxChildren) {
-                    Disk childDisk = (Disk) node;
-                    childDisk.setDraggable(false);
+                // If there are smaller disks already present on the target rod,
+                // make them undraggable after the current one is added
+                if (!vBoxChildren.isEmpty()) {
+                    for (Node node : vBoxChildren) {
+                        Disk childDisk = (Disk) node;
+                        childDisk.setDraggable(false);
+                    }
                 }
+
+                // The most recently added disk should be draggable
+                currentDisk.setDraggable(true);
+                vBoxChildren.add(currentDisk);
+
+                // Reset translate values
+                currentDisk.setTranslateX(0);
+                currentDisk.setTranslateY(0);
+
+                // Make the topmost disk from the source VBox draggable
+                if (!sourceVBoxChildren.isEmpty()) {
+                    ((Disk) (sourceVBoxChildren.get(0))).setDraggable(true);
+                }
+
+                currentDisk.setMouseTransparent(false);
+            } else {
+                // Set it back to its location
+                currentDisk.setTranslateX(0);
+                currentDisk.setTranslateY(0);
             }
-
-            // The most recently added disk should be draggable
-            currentDisk.setDraggable(true);
-            vBoxChildren.add(currentDisk);
-
-            // Reset translate values
-            currentDisk.setTranslateX(0);
-            currentDisk.setTranslateY(0);
-
-            // Make the topmost disk from the source VBox draggable
-            if (!sourceVBoxChildren.isEmpty()) {
-                ((Disk) (sourceVBoxChildren.get(0))).setDraggable(true);
-            }
-
-            currentDisk.setMouseTransparent(false);
         });
+    }
+
+    // This function checks if the user is allowed to drop the current disk on top
+    // of the disks that are already present on the rod. This is achieved by comparing the
+    // sizes of the disks.
+    private boolean isDroppingAllowed(Disk currentDisk, ObservableList<Node> disksOnRod) {
+        // If there is no disk on the rod, then the current disk can be added
+        if (disksOnRod == null || disksOnRod.isEmpty()) {
+            return true;
+        }
+
+        // Get the top disk on the rod
+        Disk disk = (Disk) disksOnRod.get(0);
+
+        return currentDisk.getSize() <= disk.getSize();
     }
 }

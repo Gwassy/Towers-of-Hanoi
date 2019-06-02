@@ -3,12 +3,12 @@ package model;
 import javafx.scene.shape.Rectangle;
 
 public class Disk extends Rectangle {
-    private double orgSceneX;
+    private double orgSceneX;            // These 4 variables are used for moving the disk
     private double orgSceneY;
     private double orgTranslateX;
     private double orgTranslateY;
-    private int size;
-    private boolean draggable = false;
+    private int size;                    // The size will keep track of which disk is allowed to go on top of another
+    private boolean draggable = false;   // This boolean is used to specify whether the user is allowed to drag a disk
 
     public double getOrgSceneX() {
         return orgSceneX;
