@@ -43,44 +43,62 @@ public class MainController {
 
     private void addEventHandlers(Disk disk) {
         disk.setOnMouseEntered(event -> {
-            disk.setCursor(Cursor.HAND);
+            if (disk.isDraggable()) {
+                disk.setCursor(Cursor.HAND);
+            } else {
+                disk.setCursor(Cursor.DEFAULT);
+            }
         });
 
         disk.setOnMousePressed(event -> {
-            model.setCurrentDisk(disk);
+            if (disk.isDraggable()) {
+                model.setCurrentDisk(disk);
 
-            disk.setOrgSceneX(event.getSceneX());
-            disk.setOrgSceneY(event.getSceneY());
-            disk.setOrgTranslateX(disk.getTranslateX());
-            disk.setOrgTranslateY(disk.getTranslateY());
+                disk.setOrgSceneX(event.getSceneX());
+                disk.setOrgSceneY(event.getSceneY());
+                disk.setOrgTranslateX(disk.getTranslateX());
+                disk.setOrgTranslateY(disk.getTranslateY());
 
-            disk.setMouseTransparent(true);
-            disk.setCursor(Cursor.CLOSED_HAND);
+                disk.setMouseTransparent(true);
+                disk.setCursor(Cursor.CLOSED_HAND);
+            } else {
+                // Do nothing
+            }
 
             event.consume();
         });
 
         disk.setOnDragDetected(event -> {
-            disk.startFullDrag();
+            if (disk.isDraggable()) {
+                disk.startFullDrag();
+            } else {
+                // Do nothing
+            }
         });
 
         disk.setOnMouseDragged(event -> {
-            double offsetX = event.getSceneX() - disk.getOrgSceneX();
-            double offsetY = event.getSceneY() - disk.getOrgSceneY();
-            double newTranslateX = disk.getOrgTranslateX() + offsetX;
-            double newTranslateY = disk.getOrgTranslateY() + offsetY;
+            if (disk.isDraggable()) {
+                double offsetX = event.getSceneX() - disk.getOrgSceneX();
+                double offsetY = event.getSceneY() - disk.getOrgSceneY();
+                double newTranslateX = disk.getOrgTranslateX() + offsetX;
+                double newTranslateY = disk.getOrgTranslateY() + offsetY;
 
-            disk.setTranslateX(newTranslateX);
-            disk.setTranslateY(newTranslateY);
+                disk.setTranslateX(newTranslateX);
+                disk.setTranslateY(newTranslateY);
+            } else {
+                // Do nothing
+            }
         });
 
         disk.setOnMouseReleased(event -> {
-            disk.setMouseTransparent(false);
-            disk.setCursor(Cursor.DEFAULT);
+            if (disk.isDraggable()) {
+                disk.setMouseTransparent(false);
+                disk.setCursor(Cursor.DEFAULT);
 
-            // Set it back to its location
-            disk.setTranslateX(0);
-            disk.setTranslateY(0);
+                // Set it back to its location
+                disk.setTranslateX(0);
+                disk.setTranslateY(0);
+            }
         });
     }
 
@@ -90,11 +108,33 @@ public class MainController {
             ObservableList<Node> vBoxChildren = vBox.getChildren();
             Disk currentDisk = model.getCurrentDisk();
 
+            // Create a reference to the disks remaining in the
+            // source VBox
+            VBox sourceVBox = (VBox) currentDisk.getParent();
+            ObservableList<Node> sourceVBoxChildren = sourceVBox.getChildren();
+
+
+            // If there are smaller disks already present on the target rod,
+            // make them undraggable after the current one is added
+            if (!vBoxChildren.isEmpty()) {
+                for (Node node : vBoxChildren) {
+                    Disk childDisk = (Disk) node;
+                    childDisk.setDraggable(false);
+                }
+            }
+
+            // The most recently added disk should be draggable
+            currentDisk.setDraggable(true);
             vBoxChildren.add(currentDisk);
 
             // Reset translate values
             currentDisk.setTranslateX(0);
             currentDisk.setTranslateY(0);
+
+            // Make the topmost disk from the source VBox draggable
+            if (!sourceVBoxChildren.isEmpty()) {
+                ((Disk) (sourceVBoxChildren.get(0))).setDraggable(true);
+            }
 
             currentDisk.setMouseTransparent(false);
         });

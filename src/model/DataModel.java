@@ -48,6 +48,9 @@ public class DataModel {
             width = width - 20;
         }
 
+        // Only the topmost disk should be draggable when the game starts
+        diskList.get(listSize - 1).setDraggable(true);
+
         // Sort the list by width, so that the disk with the greatest width
         // gets to be at the bottom of the stack
         diskList.sort(Comparator.comparingInt((Disk o) -> (int) o.getWidth()));
