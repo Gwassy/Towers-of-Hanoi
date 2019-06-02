@@ -1,4 +1,4 @@
-package sample;
+package model;
 
 import javafx.scene.shape.Rectangle;
 
@@ -8,7 +8,7 @@ public class Disk extends Rectangle {
     private double orgTranslateX;
     private double orgTranslateY;
     private int size;
-
+    private boolean draggable = false;
 
     public double getOrgSceneX() {
         return orgSceneX;
@@ -48,5 +48,13 @@ public class Disk extends Rectangle {
 
     public void setSize(int size) {
         this.size = size;
+    }
+
+    public boolean isDraggable() {
+        return draggable;
+    }
+
+    public void setDraggable(boolean draggable) {
+        this.draggable = draggable;
     }
 }

@@ -6,8 +6,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.StackPane?>
 
-<?import sample.Disk?>
-<BorderPane fx:controller="sample.Controller"
+<BorderPane fx:controller="application.MainController"
             xmlns:fx="http://javafx.com/fxml">
 
     <bottom>
@@ -23,17 +22,8 @@
 
                     <StackPane style=" -fx-border-color:blue; -fx-border-width: 1; -fx-border-style: solid;">
                         <Rectangle width="15" height="250"/>
-                        <VBox style=" -fx-border-color:yellow; -fx-border-width: 1; -fx-border-style: solid;"
+                        <VBox fx:id="vBox1" style=" -fx-border-color:yellow; -fx-border-width: 1; -fx-border-style: solid;"
                               alignment="BOTTOM_CENTER">
-                            <Disk width="90" height="20" arcWidth="10" arcHeight="10" fill="grey"
-                                  onMousePressed="#setOnMousePressed"
-                                  onMouseDragged="#setOnMouseDragged"
-                                  onMouseEntered="#setOnMouseEntered"
-                                  onDragDetected="#setOnDragDetected"
-                                  onMouseReleased="#setOnMouseReleased"/>
-                            <Disk width="120" height="20" arcWidth="10" arcHeight="10" fill="grey"/>
-                            <Disk width="150" height="20" arcWidth="10" arcHeight="10" fill="grey"/>
-                            <Disk width="180" height="20" arcWidth="10" arcHeight="10" fill="grey"/>
                         </VBox>
                     </StackPane>
 
@@ -44,10 +34,9 @@
                       style=" -fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;"
                       alignment="CENTER">
 
-                    <StackPane style=" -fx-border-color:blue; -fx-border-width: 1; -fx-border-style: solid;"
-                               onMouseDragReleased="#setOnMouseDragReleased">
+                    <StackPane style=" -fx-border-color:blue; -fx-border-width: 1; -fx-border-style: solid;">
                         <Rectangle width="15" height="250"/>
-                        <VBox style=" -fx-border-color:yellow; -fx-border-width: 1; -fx-border-style: solid;"
+                        <VBox fx:id="vBox2" style=" -fx-border-color:yellow; -fx-border-width: 1; -fx-border-style: solid;"
                               alignment="BOTTOM_CENTER">
                         </VBox>
                     </StackPane>
@@ -59,7 +48,13 @@
                       style=" -fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;"
                       alignment="CENTER">
 
-                    <Rectangle width="15" height="250"/>
+                    <StackPane style=" -fx-border-color:blue; -fx-border-width: 1; -fx-border-style: solid;">
+                        <Rectangle width="15" height="250"/>
+                        <VBox fx:id="vBox3" style=" -fx-border-color:yellow; -fx-border-width: 1; -fx-border-style: solid;"
+                              alignment="BOTTOM_CENTER">
+                        </VBox>
+                    </StackPane>
+
                     <Rectangle width="240" height="20" arcWidth="10" arcHeight="10" fill="forestgreen"/>
                 </VBox>
             </children>
