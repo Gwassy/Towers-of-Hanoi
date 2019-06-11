@@ -3,7 +3,7 @@ package model;
 import javafx.scene.shape.Rectangle;
 
 public class Disk extends Rectangle {
-    private double orgSceneX;            // These 4 variables are used for moving the disk
+    private double orgSceneX;            // These 4 variables are used for translating the disks
     private double orgSceneY;
     private double orgTranslateX;
     private double orgTranslateY;

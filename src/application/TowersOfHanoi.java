@@ -15,16 +15,15 @@ public class TowersOfHanoi extends Application {
         Parent root = fxmlLoader.load();
         MainController mainController = fxmlLoader.getController();
 
-        // 5 represents the number of disks that are present at startup
-        // on the leftmost rod
+        // The argument in the constructor of the data model represents the number of disks
+        // that are present at startup on the left tower
         DataModel model = new DataModel(5);
         mainController.initModel(model);
 
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Towers of Hanoi");
         primaryStage.setScene(new Scene(root, 1100, 600));
         primaryStage.show();
     }
-
 
     public static void main(String[] args) {
         launch(args);
