@@ -9,6 +9,8 @@ public class Disk extends Rectangle {
     private double orgTranslateY;
     private int size;                    // The size will keep track of which disk is allowed to go on top of another
     private boolean draggable = false;   // This boolean is used to specify whether the user is allowed to drag a disk
+    private int diskOffset;              // This integer holds the initial offset of the disk (eg. if "this" is the second disk
+                                         // from bottom to top, then the offset will be 40 = disk.getHeight() * 2 )
 
     public double getOrgSceneX() {
         return orgSceneX;
@@ -56,5 +58,13 @@ public class Disk extends Rectangle {
 
     public void setDraggable(boolean draggable) {
         this.draggable = draggable;
+    }
+
+    public int getDiskOffset() {
+        return diskOffset;
+    }
+
+    public void setDiskOffset(int diskOffset) {
+        this.diskOffset = diskOffset;
     }
 }

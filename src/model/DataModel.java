@@ -49,6 +49,8 @@ public class DataModel {
         final double ARC_WIDTH = 10.0;                // These 2 specify the roundness of the corners
         final double ARC_HEIGHT = 10.0;
         int diskSize = this.nrOfDisks;                // Used to assign sizes to the disks that will be created
+        int offset = 20;                              // Used to assign the offsets of the disks; will be used for translating the
+                                                      // disks on the Y axis
 
         ObservableList<Disk> diskList = FXCollections.observableArrayList();
 
@@ -58,6 +60,7 @@ public class DataModel {
             // Set the size and color of the disk to be added
             diskToBeAdded.setSize(diskSize);
             diskToBeAdded.setWidth(width);
+            diskToBeAdded.setDiskOffset(offset);
             diskToBeAdded.setHeight(DISK_HEIGHT);
             diskToBeAdded.setArcWidth(ARC_WIDTH);
             diskToBeAdded.setArcHeight(ARC_HEIGHT);
@@ -71,6 +74,9 @@ public class DataModel {
 
             // The size of the next disk is 1 less than the previous one
             diskSize = diskSize - 1;
+
+            // The offsets increase by 20, starting from the bottom
+            offset = offset + 20;
         }
 
         // Only the top disk should be draggable when the game starts

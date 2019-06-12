@@ -8,6 +8,7 @@ import javafx.scene.Cursor;
 import javafx.scene.layout.VBox;
 import model.DataModel;
 import model.Disk;
+import model.Tower;
 
 public class MainController {
     private DataModel model;
@@ -140,6 +141,9 @@ public class MainController {
             ObservableList<Disk> disksOnLeftTower = model.getLeftTower().getDisksOnTower();
             ObservableList<Disk> disksOnMiddleTower = model.getMiddleTower().getDisksOnTower();
             ObservableList<Disk> disksOnRightTower = model.getRightTower().getDisksOnTower();
+            Tower leftTower = model.getLeftTower();
+            Tower middleTower = model.getMiddleTower();
+            Tower rightTower = model.getRightTower();
 
             VBox sourceVBox = (VBox) event.getSource();
 
@@ -150,7 +154,9 @@ public class MainController {
                     // if the top disk on the middle tower has a greater size than
                     // the one being dropped
                     if (isDroppingAllowed(model.getMiddleTower().getDisksOnTower())) {
+                        // Set the translate on the X and Y axis
                         translateDiskOnX = (((middleVBox.getWidth() - currentDiskWidth) / 2) * 2) + currentDiskWidth;
+                        translateDiskOnY = model.getCurrentDisk().getDiskOffset() - middleTower.getCurrentOffset() - 20;
 
                         // If there are disks on the middle tower, make them undraggable
                         if (!disksOnMiddleTower.isEmpty()) {
@@ -167,17 +173,22 @@ public class MainController {
                         if (!disksOnLeftTower.isEmpty()) {
                             disksOnLeftTower.get(0).setDraggable(true);
                         }
+
+                        // Set the offsets of the 2 towers that are involved
+                        middleTower.setCurrentOffset(disksOnMiddleTower.size() * 20);
+                        leftTower.setCurrentOffset(disksOnLeftTower.size() * 20);
                     } else {
                         // Reset the position back to the left tower
                         translateDiskOnX = 0;
                         translateDiskOnY = 0;
                     }
                 } else if (sourceVBox.equals(rightVBox)) {
+                    // If trying to drop from the left tower onto the right tower and
+                    // if the top disk on the right tower has a greater size than
+                    // the one being dropped
                     if (isDroppingAllowed(model.getRightTower().getDisksOnTower())) {
-                        // If trying to drop from the left tower onto the right tower and
-                        // if the top disk on the right tower has a greater size than
-                        // the one being dropped
                         translateDiskOnX = 2 * ((((middleVBox.getWidth() - currentDiskWidth) / 2) * 2) + currentDiskWidth);
+                        translateDiskOnY = model.getCurrentDisk().getDiskOffset() - rightTower.getCurrentOffset() - 20;
 
                         // If there are disks on the right tower, make them undraggable
                         if (!disksOnRightTower.isEmpty()) {
@@ -194,6 +205,10 @@ public class MainController {
                         if (!disksOnLeftTower.isEmpty()) {
                             disksOnLeftTower.get(0).setDraggable(true);
                         }
+
+                        // Set the offsets of the 2 towers that are involved
+                        rightTower.setCurrentOffset(disksOnRightTower.size() * 20);
+                        leftTower.setCurrentOffset(disksOnLeftTower.size() * 20);
                     } else {
                         // Reset the position back to the left tower
                         translateDiskOnX = 0;
@@ -214,6 +229,7 @@ public class MainController {
                     // the one being dropped
                     if (isDroppingAllowed(disksOnRightTower)) {
                         translateDiskOnX = 2 * ((((middleVBox.getWidth() - currentDiskWidth) / 2) * 2) + currentDiskWidth);
+                        translateDiskOnY = model.getCurrentDisk().getDiskOffset() - rightTower.getCurrentOffset() - 20;
 
                         // If there are disks on the right tower, make them undraggable
                         if (!disksOnRightTower.isEmpty()) {
@@ -230,14 +246,20 @@ public class MainController {
                         if (!disksOnMiddleTower.isEmpty()) {
                             disksOnMiddleTower.get(0).setDraggable(true);
                         }
+
+                        // Set the offsets of the 2 towers that are involved
+                        rightTower.setCurrentOffset(disksOnRightTower.size() * 20);
+                        middleTower.setCurrentOffset(disksOnMiddleTower.size() * 20);
                     } else {
                         // Reset the position back to the middle tower
                         translateDiskOnX = (((middleVBox.getWidth() - currentDiskWidth) / 2) * 2) + currentDiskWidth;
+                        translateDiskOnY = model.getCurrentDisk().getDiskOffset() - middleTower.getCurrentOffset();
                     }
                 } else if ((event.getSceneX() > middleVBoxBounds.getMinX() && event.getSceneX() < middleVBoxBounds.getMaxX()) ||
                         event.getSceneY() < middleVBoxBounds.getMinY()) {
                     // If trying to drop from the middle tower to anywhere outside of the left or right towers
                     translateDiskOnX = (((middleVBox.getWidth() - currentDiskWidth) / 2) * 2) + currentDiskWidth;
+                    translateDiskOnY = model.getCurrentDisk().getDiskOffset() - middleTower.getCurrentOffset();
                 } else {
                     // If trying to drop from the middle tower onto the left tower and
                     // if the top disk on the left tower has a greater size than
@@ -245,7 +267,7 @@ public class MainController {
                     if (isDroppingAllowed(disksOnLeftTower)) {
 
                         translateDiskOnX = 0;
-                        translateDiskOnY = 0;
+                        translateDiskOnY = model.getCurrentDisk().getDiskOffset() - leftTower.getCurrentOffset() - 20;
 
                         // If there are disks on the left tower, make them undraggable
                         if (!disksOnLeftTower.isEmpty()) {
@@ -262,9 +284,14 @@ public class MainController {
                         if (!disksOnMiddleTower.isEmpty()) {
                             disksOnMiddleTower.get(0).setDraggable(true);
                         }
+
+                        // Set the offsets of the 2 towers that are involved
+                        leftTower.setCurrentOffset(disksOnLeftTower.size() * 20);
+                        middleTower.setCurrentOffset(disksOnMiddleTower.size() * 20);
                     } else {
                         // Reset the position back to the middle tower
                         translateDiskOnX = (((middleVBox.getWidth() - currentDiskWidth) / 2) * 2) + currentDiskWidth;
+                        translateDiskOnY = model.getCurrentDisk().getDiskOffset() - middleTower.getCurrentOffset();
                     }
                 }
             }
@@ -277,6 +304,7 @@ public class MainController {
                     // the one being dropped
                     if (isDroppingAllowed(disksOnMiddleTower)) {
                         translateDiskOnX = (((middleVBox.getWidth() - currentDiskWidth) / 2) * 2) + currentDiskWidth;
+                        translateDiskOnY = model.getCurrentDisk().getDiskOffset() - middleTower.getCurrentOffset() - 20;
 
                         // If there are disks on the middle tower, make them undraggable
                         if (!disksOnMiddleTower.isEmpty()) {
@@ -293,24 +321,28 @@ public class MainController {
                         if (!disksOnRightTower.isEmpty()) {
                             disksOnRightTower.get(0).setDraggable(true);
                         }
+
+                        // Set the offsets of the 2 towers that are involved
+                        middleTower.setCurrentOffset(disksOnMiddleTower.size() * 20);
+                        rightTower.setCurrentOffset(disksOnRightTower.size() * 20);
                     } else {
                         // Reset the position back to the right tower
                         translateDiskOnX = 2 * ((((middleVBox.getWidth() - currentDiskWidth) / 2) * 2) + currentDiskWidth);
+                        translateDiskOnY = model.getCurrentDisk().getDiskOffset() - rightTower.getCurrentOffset();
                     }
                 } else if ((event.getSceneX() > rightVBoxBounds.getMinX() && event.getSceneX() < rightVBoxBounds.getMaxX()) ||
                         event.getSceneY() < rightVBoxBounds.getMinY()) {
                     // If trying to drop from the right tower to anywhere outside of the left or middle towers
 
                     translateDiskOnX = 2 * ((((middleVBox.getWidth() - currentDiskWidth) / 2) * 2) + currentDiskWidth);
-
+                    translateDiskOnY = model.getCurrentDisk().getDiskOffset() - rightTower.getCurrentOffset();
                 } else {
+                    // If trying to drop from the right tower onto the left tower and
+                    // if the top disk on the left tower has a greater size than
+                    // the one being dropped
                     if (isDroppingAllowed(disksOnLeftTower)) {
-                        // If trying to drop from the right tower onto the left tower and
-                        // if the top disk on the left tower has a greater size than
-                        // the one being dropped
-
                         translateDiskOnX = 0;
-                        translateDiskOnY = 0;
+                        translateDiskOnY = model.getCurrentDisk().getDiskOffset() - leftTower.getCurrentOffset() - 20;
 
                         // If there are disks on the left tower, make them undraggable
                         if (!disksOnLeftTower.isEmpty()) {
@@ -327,9 +359,14 @@ public class MainController {
                         if (!disksOnRightTower.isEmpty()) {
                             disksOnRightTower.get(0).setDraggable(true);
                         }
+
+                        // Set the offsets of the 2 towers that are involved
+                        leftTower.setCurrentOffset(disksOnLeftTower.size() * 20);
+                        rightTower.setCurrentOffset(disksOnRightTower.size() * 20);
                     } else {
                         // Reset the position back to the right tower
                         translateDiskOnX = 2 * ((((middleVBox.getWidth() - currentDiskWidth) / 2) * 2) + currentDiskWidth);
+                        translateDiskOnY = model.getCurrentDisk().getDiskOffset() - rightTower.getCurrentOffset();
                     }
                 }
             }
@@ -360,9 +397,13 @@ public class MainController {
             return true;
         }
 
-        // Get the top disk on the tower
-        Disk topDisk = disksOnTower.get(disksOnTower.size() - 1);
+        // Check if any of the disks on the tower has a lesser size than the disk being dropped
+        for (Disk disk : disksOnTower) {
+            if (model.getCurrentDisk().getSize() > disk.getSize()) {
+                return false;
+            }
+        }
 
-        return model.getCurrentDisk().getSize() <= topDisk.getSize();
+        return true;
     }
 }
