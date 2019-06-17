@@ -5,13 +5,8 @@ import javafx.collections.ObservableList;
 
 public class Tower {
     private ObservableList<Disk> disksOnTower;      // A list of the disks that are present on one of the 3 towers (left, middle, right)
-    private int initialOffset;                      // The initial offset on the Y axis (only assigned for the left tower)
     private int currentOffset;                      // The current offset on the Y axis for the disks that are currently on the tower
     private boolean isSource;                       // This flag specifies whether the current disk is being dragged from this tower
-
-    public Tower(int initialOffset) {
-        this.initialOffset = initialOffset;
-    }
 
     public Tower() {
         this.disksOnTower = FXCollections.observableArrayList();
@@ -23,10 +18,6 @@ public class Tower {
 
     public void setCurrentOffset(int currentOffset) {
         this.currentOffset = currentOffset;
-    }
-
-    public int getInitialOffset() {
-        return initialOffset;
     }
 
     public ObservableList<Disk> getDisksOnTower() {
