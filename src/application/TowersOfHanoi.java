@@ -37,6 +37,7 @@ public class TowersOfHanoi extends Application {
 
             if (selectedRadioButton.getText().equals("Manual")) {
                 mainController.initModel(model);
+                primaryStage.setTitle("Towers of Hanoi");
                 primaryStage.setScene(manualGameScene);
             } else {
             }
@@ -44,6 +45,7 @@ public class TowersOfHanoi extends Application {
 
         Scene gameMenuScene = new Scene(root, 1100, 600);
         primaryStage.setScene(gameMenuScene);
+        primaryStage.setTitle("Towers of Hanoi");
         primaryStage.show();
     }
 

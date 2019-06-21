@@ -7,13 +7,10 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.Scene?>
 
-<Scene fx:controller="application.MainController"
-       xmlns:fx="http://javafx.com/fxml"
-       width="1100"
-       height="600">
+<Scene fx:controller="application.MainController" xmlns:fx="http://javafx.com/fxml" width="1100" height="600">
     <BorderPane>
         <bottom>
-            <GridPane style=" -fx-border-color:red; -fx-border-width: 1; -fx-border-style: solid;">
+            <GridPane>
                 <padding>
                     <Insets left="70" right="70" bottom="50"/>
                 </padding>
@@ -22,37 +19,24 @@
                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="33.33" prefWidth="100"/>
                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="33.33" prefWidth="100"/>
                 </columnConstraints>
-                <VBox GridPane.rowIndex="0" GridPane.columnIndex="0"
-                      style=" -fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;"
-                      alignment="CENTER">
-                    <StackPane style=" -fx-border-color:blue; -fx-border-width: 1; -fx-border-style: solid;">
+                <VBox GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="CENTER">
+                    <StackPane>
                         <Rectangle width="15" height="250"/>
-                        <VBox fx:id="leftVBox"
-                              style=" -fx-border-color:yellow; -fx-border-width: 1; -fx-border-style: solid;"
-                              alignment="BOTTOM_CENTER">
-                        </VBox>
+                        <VBox fx:id="leftVBox" alignment="BOTTOM_CENTER"/>
                     </StackPane>
                     <Rectangle width="240" height="20" arcWidth="10" arcHeight="10" fill="forestgreen"/>
                 </VBox>
-                <VBox fx:id="middleVBox" GridPane.rowIndex="0" GridPane.columnIndex="1"
-                      style=" -fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;"
-                      alignment="CENTER">
-                    <StackPane style=" -fx-border-color:blue; -fx-border-width: 1; -fx-border-style: solid;">
+                <VBox fx:id="middleVBox" GridPane.rowIndex="0" GridPane.columnIndex="1" alignment="CENTER">
+                    <StackPane>
                         <Rectangle width="15" height="250"/>
-                        <VBox style=" -fx-border-color:yellow; -fx-border-width: 1; -fx-border-style: solid;"
-                              alignment="BOTTOM_CENTER">
-                        </VBox>
+                        <VBox alignment="BOTTOM_CENTER"/>
                     </StackPane>
                     <Rectangle width="240" height="20" arcWidth="10" arcHeight="10" fill="forestgreen"/>
                 </VBox>
-                <VBox fx:id="rightVBox" GridPane.rowIndex="0" GridPane.columnIndex="2"
-                      style=" -fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;"
-                      alignment="CENTER">
-                    <StackPane style=" -fx-border-color:blue; -fx-border-width: 1; -fx-border-style: solid;">
+                <VBox fx:id="rightVBox" GridPane.rowIndex="0" GridPane.columnIndex="2" alignment="CENTER">
+                    <StackPane>
                         <Rectangle width="15" height="250"/>
-                        <VBox style=" -fx-border-color:yellow; -fx-border-width: 1; -fx-border-style: solid;"
-                              alignment="BOTTOM_CENTER">
-                        </VBox>
+                        <VBox alignment="BOTTOM_CENTER"/>
                     </StackPane>
                     <Rectangle width="240" height="20" arcWidth="10" arcHeight="10" fill="forestgreen"/>
                 </VBox>

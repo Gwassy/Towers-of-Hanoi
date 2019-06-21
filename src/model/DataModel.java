@@ -8,7 +8,7 @@ import java.util.Comparator;
 public class DataModel {
     private Disk currentDisk;                       // The disk that is currently being dragged
     private int nrOfDisks;                          // The total number of disks
-    private Tower leftTower;                        // The 3 towers
+    private Tower leftTower;
     private Tower middleTower;
     private Tower rightTower;
 
@@ -46,6 +46,9 @@ public class DataModel {
         this.currentDisk = currentDisk;
     }
 
+    // Assigns to the left tower a list of disks with a size equal to the argument of the function
+    //
+    // param: nrOfDisks -> the total number of disks present at startup, as chosen by the user
     public void createDiskList(int nrOfDisks) {
         double width = 180.0;                         // The bottom disk starts with a width of 180
         final double DISK_HEIGHT = 20.0;              // The height of all the disks is 20
@@ -70,7 +73,7 @@ public class DataModel {
             diskToBeAdded.setArcHeight(ARC_HEIGHT);
             diskToBeAdded.setFill(Color.GRAY);
 
-            // Add the disk to the top of the stack
+            // Add the disk to the list
             diskList.add(diskToBeAdded);
 
             // The difference in width between the disks is 20
@@ -90,6 +93,7 @@ public class DataModel {
         // gets to be at the bottom of the rod
         diskList.sort(Comparator.comparingInt((Disk o) -> (int) o.getWidth()));
 
+        // At startup, only the left tower shall have disks
         this.leftTower.setDisksOnTower(diskList);
     }
 }
