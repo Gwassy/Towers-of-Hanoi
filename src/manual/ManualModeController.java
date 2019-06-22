@@ -63,7 +63,7 @@ public class ManualModeController {
         ObservableList<Disk> diskList = model.getLeftTower().getDisksOnTower();
 
         for (Disk disk : diskList) {
-            addEventHandlersForVBox(disk);
+            addEventHandlersForDisk(disk);
         }
     }
 
@@ -75,7 +75,7 @@ public class ManualModeController {
      *
      * @param disk the disk for which the handlers will be added
      */
-    private void addEventHandlersForVBox(Disk disk) {
+    private void addEventHandlersForDisk(Disk disk) {
         disk.setOnMouseEntered(event -> {
             if (disk.isDraggable()) {
                 disk.setCursor(Cursor.HAND);
@@ -166,22 +166,23 @@ public class ManualModeController {
      *
      * @param vBox the VBox for which the handlers will be added
      */
-    public void addEventHandlersForVBox(VBox vBox) {
+    private void addEventHandlersForVBox(VBox vBox) {
         vBox.setOnMouseDragReleased(event -> {
             double translateDiskOnX = 0;    // The amount by which the disk will be translated on the X axis
             double translateDiskOnY = 0;    // The amount by which the disk will be translated on the Y axis
             double currentDiskWidth = model.getCurrentDisk().getWidth();
-            ObservableList<Disk> disksOnLeftTower = model.getLeftTower().getDisksOnTower();
-            ObservableList<Disk> disksOnMiddleTower = model.getMiddleTower().getDisksOnTower();
-            ObservableList<Disk> disksOnRightTower = model.getRightTower().getDisksOnTower();
             Tower leftTower = model.getLeftTower();
             Tower middleTower = model.getMiddleTower();
             Tower rightTower = model.getRightTower();
+            ObservableList<Disk> disksOnLeftTower = leftTower.getDisksOnTower();
+            ObservableList<Disk> disksOnMiddleTower = middleTower.getDisksOnTower();
+            ObservableList<Disk> disksOnRightTower = rightTower.getDisksOnTower();
+
 
             VBox sourceVBox = (VBox) event.getSource();
 
             // Handle the case when the current disk is dragged from the left tower
-            if (model.getLeftTower().isSource()) {
+            if (leftTower.isSource()) {
                 if (sourceVBox.equals(middleVBox)) {
                     // If trying to drop from the left tower onto the middle tower and
                     // if the top disk on the middle tower has a greater size than
@@ -220,6 +221,7 @@ public class ManualModeController {
                     // if the top disk on the right tower has a greater size than
                     // the one being dropped
                     if (isDroppingAllowed(model.getRightTower().getDisksOnTower())) {
+                        // Set the translate on the X and Y axis
                         translateDiskOnX = 2 * ((((middleVBox.getWidth() - currentDiskWidth) / 2) * 2) + currentDiskWidth);
                         translateDiskOnY = model.getCurrentDisk().getDiskOffset() - rightTower.getCurrentOffset() - 20;
 
@@ -255,12 +257,13 @@ public class ManualModeController {
             }
 
             // Handle the case when the current disk is dragged from the middle tower
-            if (model.getMiddleTower().isSource()) {
+            if (middleTower.isSource()) {
                 if (sourceVBox.equals(rightVBox)) {
                     // If trying to drop from the middle tower onto the right tower and
                     // if the top disk on the right tower has a greater size than
                     // the one being dropped
                     if (isDroppingAllowed(disksOnRightTower)) {
+                        // Set the translate on the X and Y axis
                         translateDiskOnX = 2 * ((((middleVBox.getWidth() - currentDiskWidth) / 2) * 2) + currentDiskWidth);
                         translateDiskOnY = model.getCurrentDisk().getDiskOffset() - rightTower.getCurrentOffset() - 20;
 
@@ -298,7 +301,7 @@ public class ManualModeController {
                     // if the top disk on the left tower has a greater size than
                     // the one being dropped
                     if (isDroppingAllowed(disksOnLeftTower)) {
-
+                        // Set the translate on the X and Y axis
                         translateDiskOnX = 0;
                         translateDiskOnY = model.getCurrentDisk().getDiskOffset() - leftTower.getCurrentOffset() - 20;
 
@@ -330,12 +333,13 @@ public class ManualModeController {
             }
 
             // Handle the case when the current disk is dragged from the right tower
-            if (model.getRightTower().isSource()) {
+            if (rightTower.isSource()) {
                 if (sourceVBox.equals(middleVBox)) {
                     // If trying to drop from the right tower onto the middle tower and
                     // if the top disk on the middle tower has a greater size than
                     // the one being dropped
                     if (isDroppingAllowed(disksOnMiddleTower)) {
+                        // Set the translate on the X and Y axis
                         translateDiskOnX = (((middleVBox.getWidth() - currentDiskWidth) / 2) * 2) + currentDiskWidth;
                         translateDiskOnY = model.getCurrentDisk().getDiskOffset() - middleTower.getCurrentOffset() - 20;
 
@@ -366,7 +370,6 @@ public class ManualModeController {
                 } else if ((event.getSceneX() > rightVBoxBounds.getMinX() && event.getSceneX() < rightVBoxBounds.getMaxX()) ||
                         event.getSceneY() < rightVBoxBounds.getMinY()) {
                     // If trying to drop from the right tower to anywhere outside of the left or middle towers
-
                     translateDiskOnX = 2 * ((((middleVBox.getWidth() - currentDiskWidth) / 2) * 2) + currentDiskWidth);
                     translateDiskOnY = model.getCurrentDisk().getDiskOffset() - rightTower.getCurrentOffset();
                 } else {
@@ -374,6 +377,7 @@ public class ManualModeController {
                     // if the top disk on the left tower has a greater size than
                     // the one being dropped
                     if (isDroppingAllowed(disksOnLeftTower)) {
+                        // Set the translate on the X and Y axis
                         translateDiskOnX = 0;
                         translateDiskOnY = model.getCurrentDisk().getDiskOffset() - leftTower.getCurrentOffset() - 20;
 
@@ -409,9 +413,9 @@ public class ManualModeController {
             model.getCurrentDisk().setTranslateY(translateDiskOnY);
 
             // Reset the source flags
-            model.getLeftTower().setSource(false);
-            model.getMiddleTower().setSource(false);
-            model.getRightTower().setSource(false);
+            leftTower.setSource(false);
+            middleTower.setSource(false);
+            rightTower.setSource(false);
 
             // Set the vBoxes to transparent, so that the disks can be clicked again
             model.getCurrentDisk().setMouseTransparent(false);
