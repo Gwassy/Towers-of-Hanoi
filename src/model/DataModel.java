@@ -46,10 +46,14 @@ public class DataModel {
         this.currentDisk = currentDisk;
     }
 
-    // Assigns to the left tower a list of disks with a size equal to the argument of the function
-    //
-    // param: nrOfDisks -> the total number of disks present at startup, as chosen by the user
+    /**
+     * Assigns to the left tower a list of disks with a size equal to the argument of the function.
+     * These disks will be assigned sizes, offsets and colors; only the top disk will be draggable.
+     *
+     * @param nrOfDisks the total number of disks present at startup, as chosen by the user
+     */
     public void createDiskList(int nrOfDisks) {
+
         double width = 180.0;                         // The bottom disk starts with a width of 180
         final double DISK_HEIGHT = 20.0;              // The height of all the disks is 20
         final double ARC_WIDTH = 10.0;                // These 2 specify the roundness of the corners

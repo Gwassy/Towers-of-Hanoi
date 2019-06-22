@@ -1,4 +1,4 @@
-package application;
+package manual;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -10,7 +10,7 @@ import model.DataModel;
 import model.Disk;
 import model.Tower;
 
-public class MainController {
+public class ManualModeController {
     private DataModel model;
 
     @FXML
@@ -27,6 +27,14 @@ public class MainController {
     private Bounds middleVBoxBounds;
     private Bounds rightVBoxBounds;
 
+    /**
+     * Used to initialize the DataModel.
+     * It adds the disks on the left tower as children of the leftVBox and adds
+     * event handlers for the disks and for the 3 VBoxes corresponding to the
+     * 3 towers.
+     *
+     * @param model reference to the instance of the DataModel that is to be initialized
+     */
     public void initModel(DataModel model) {
         if (this.model != null) {
             throw new IllegalStateException("Model can only be initialized once.");
@@ -39,20 +47,35 @@ public class MainController {
 
         // Add the event handlers for the disks and the vBoxes
         addEventHandlersForDisks(model);
-        addEventHandlers(leftVBox);
-        addEventHandlers(middleVBox);
-        addEventHandlers(rightVBox);
+        addEventHandlersForVBox(leftVBox);
+        addEventHandlersForVBox(middleVBox);
+        addEventHandlersForVBox(rightVBox);
     }
 
+    /**
+     * Add event handlers for all the disks that are present at startup, by iterating
+     * through the disks on the left tower and calling the function that adds event
+     * handlers for a single disk.
+     *
+     * @param model for getting the disks on the left tower
+     */
     private void addEventHandlersForDisks(DataModel model) {
         ObservableList<Disk> diskList = model.getLeftTower().getDisksOnTower();
 
         for (Disk disk : diskList) {
-            addEventHandlers(disk);
+            addEventHandlersForVBox(disk);
         }
     }
 
-    private void addEventHandlers(Disk disk) {
+    /**
+     *  Add event handlers for the disk that is given as an argument. They are used in order
+     *  to drag the disks around the scene, by way of translating the position of the disk as
+     *  it is being dragged.
+     *  List of handlers: onMouseEntered, onMousePressed, onDragDetected, onMouseDragged, onMouseReleased
+     *
+     * @param disk the disk for which the handlers will be added
+     */
+    private void addEventHandlersForVBox(Disk disk) {
         disk.setOnMouseEntered(event -> {
             if (disk.isDraggable()) {
                 disk.setCursor(Cursor.HAND);
@@ -133,7 +156,17 @@ public class MainController {
         });
     }
 
-    public void addEventHandlers(VBox vBox) {
+    /**
+     * Add event handlers for the vBox that is given as an argument. Only the event handler for the
+     * mouseDragReleased is being treated in this function. This event handler contains the logic of
+     * what happens when the disk is being dropped to the destination tower. As the disk is being dragged,
+     * its image is being translated along, but when it is dropped inside one of the VBoxes corresponding to
+     * the 3 towers, its position is instantly being changed from the source to the destination by hardcoding
+     * the coordinates of where it should be placed.
+     *
+     * @param vBox the VBox for which the handlers will be added
+     */
+    public void addEventHandlersForVBox(VBox vBox) {
         vBox.setOnMouseDragReleased(event -> {
             double translateDiskOnX = 0;    // The amount by which the disk will be translated on the X axis
             double translateDiskOnY = 0;    // The amount by which the disk will be translated on the Y axis
@@ -388,9 +421,15 @@ public class MainController {
         });
     }
 
-    // This function checks if the user is allowed to drop the current disk on top
-    // of the disks that are already present on the target tower. This is achieved by comparing the
-    // sizes of the disks.
+    /**
+     * This function checks if the user is allowed to drop the current disk on top
+     * of the disks that are already present on the target tower. This is achieved by comparing the
+     * sizes of the disks.
+     *
+     * @param disksOnTower a list of the disks that are currently present on the target tower
+     * @return true, if the size of the disk to be dropped is smaller than either one of the
+     *         disks on the tower, false otherwise
+     */
     private boolean isDroppingAllowed(ObservableList<Disk> disksOnTower) {
         // If there is no disk on the tower, then the current disk can be added
         if (disksOnTower == null || disksOnTower.isEmpty()) {

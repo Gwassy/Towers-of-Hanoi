@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.Scene?>
 
-<Scene fx:controller="application.MainController" xmlns:fx="http://javafx.com/fxml" width="1100" height="600">
+<Scene fx:controller="manual.ManualModeController" xmlns:fx="http://javafx.com/fxml" width="1100" height="600">
     <BorderPane>
         <bottom>
             <GridPane>
