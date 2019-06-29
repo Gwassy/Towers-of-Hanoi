@@ -1,6 +1,7 @@
 package automatic;
 
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
@@ -45,8 +46,23 @@ public class AutomaticModeController {
         Tower middleTower = model.getMiddleTower();
         Tower rightTower = model.getRightTower();
 
-        startButton.setOnMousePressed(event ->
-            TowerOfHanoi(model.getNrOfDisks(), leftTower, middleTower, rightTower));
+        // Inner class that provides a task which can be used by the background thread
+        // that updates the UI
+        class TowersOfHanoiTask extends Task<Void> {
+            @Override
+            protected Void call() throws Exception {
+                TowerOfHanoi(model.getNrOfDisks(), leftTower, middleTower, rightTower);
+                return null;
+            }
+        }
+
+        startButton.setOnMousePressed(event -> {
+            TowersOfHanoiTask task = new TowersOfHanoiTask();
+            Thread backgroundThread = new Thread(task);
+
+            backgroundThread.setDaemon(true);
+            backgroundThread.start();
+        });
     }
 
     /**
@@ -71,7 +87,7 @@ public class AutomaticModeController {
      * @param destination the tower on which the disks will be placed at the end of the game
      * @param auxiliary this tower is used as an intermediate that aids in moving the disks to the destination
      */
-    private void TowerOfHanoi(int numDisks, Tower source, Tower destination, Tower auxiliary) {
+    private void TowerOfHanoi(int numDisks, Tower source, Tower destination, Tower auxiliary) throws InterruptedException {
         ObservableList<Disk> sourceDisks = source.getDisksOnTower();
         ObservableList<Disk> destinationDisks = destination.getDisksOnTower();
         ObservableList<Disk> auxiliaryDisks = auxiliary.getDisksOnTower();
@@ -104,6 +120,8 @@ public class AutomaticModeController {
                         move(source, destination);
                     }
                 }
+                // Wait for one second so that the disk movement can be seen
+                Thread.sleep(1000);
             }
             if (i % 3 == 2) {
                 if (!sourceDisks.isEmpty() && !auxiliaryDisks.isEmpty()) {
@@ -121,6 +139,8 @@ public class AutomaticModeController {
                         move(source, auxiliary);
                     }
                 }
+                // Wait for one second so that the disk movement can be seen
+                Thread.sleep(1000);
             }
             if (i % 3 == 0) {
                 if (!auxiliaryDisks.isEmpty() && !destinationDisks.isEmpty()) {
@@ -138,6 +158,8 @@ public class AutomaticModeController {
                         move(auxiliary, destination);
                     }
                 }
+                // Wait for one second so that the disk movement can be seen
+                Thread.sleep(1000);
             }
         }
     }
