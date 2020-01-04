@@ -1,0 +1,48 @@
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.Scene?>
+<?import javafx.scene.shape.*?>
+<Scene fx:controller="automatic.AutomaticModeController" xmlns:fx="http://javafx.com/fxml" width="1100" height="600">
+    <BorderPane>
+        <padding>
+            <Insets top="50" left="100"/>
+        </padding>
+        <top>
+            <Button fx:id="startButton" text="Start"/>
+        </top>
+        <bottom>
+            <GridPane>
+                <padding>
+                    <Insets left="70" right="70" bottom="50"/>
+                </padding>
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="33.33" prefWidth="100"/>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="33.33" prefWidth="100"/>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="33.33" prefWidth="100"/>
+                </columnConstraints>
+                <VBox GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="CENTER">
+                    <StackPane>
+                        <Rectangle width="15" height="250"/>
+                        <VBox fx:id="leftVBox" alignment="BOTTOM_CENTER"/>
+                    </StackPane>
+                    <Rectangle width="240" height="20" arcWidth="10" arcHeight="10" fill="forestgreen"/>
+                </VBox>
+                <VBox fx:id="middleVBox" GridPane.rowIndex="0" GridPane.columnIndex="1" alignment="CENTER">
+                    <StackPane>
+                        <Rectangle width="15" height="250"/>
+                        <VBox alignment="BOTTOM_CENTER"/>
+                    </StackPane>
+                    <Rectangle width="240" height="20" arcWidth="10" arcHeight="10" fill="forestgreen"/>
+                </VBox>
+                <VBox fx:id="rightVBox" GridPane.rowIndex="0" GridPane.columnIndex="2" alignment="CENTER">
+                    <StackPane>
+                        <Rectangle width="15" height="250"/>
+                        <VBox alignment="BOTTOM_CENTER"/>
+                    </StackPane>
+                    <Rectangle width="240" height="20" arcWidth="10" arcHeight="10" fill="forestgreen"/>
+                </VBox>
+            </GridPane>
+        </bottom>
+    </BorderPane>
+</Scene>
