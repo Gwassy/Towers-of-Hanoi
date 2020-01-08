@@ -8,7 +8,10 @@
         <Insets top="50" left="100"/>
     </padding>
     <top>
-        <Button fx:id="startButton" text="Start"/>
+        <VBox>
+            <Button fx:id="startButton" text="Start"/>
+            <Button fx:id="exitGameButton" text="Quit to main menu"/>
+        </VBox>
     </top>
     <bottom>
         <GridPane>

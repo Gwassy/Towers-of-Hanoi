@@ -3,17 +3,26 @@ package view.automatic;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import model.DataModel;
 import model.Disk;
 import model.Tower;
+
+import java.io.IOException;
 
 public class AutomaticModeController {
     private DataModel model;
 
     @FXML
     Button startButton;
+
+    @FXML
+    Button exitGameButton;
 
     @FXML
     VBox leftVBox;
@@ -62,6 +71,26 @@ public class AutomaticModeController {
 
             backgroundThread.setDaemon(true);
             backgroundThread.start();
+        });
+
+        exitGameButton.setOnMousePressed(event -> {
+            Stage stage;
+            Button button = (Button) event.getSource();
+            stage = (Stage) button.getScene().getWindow();
+
+            try {
+                FXMLLoader menuViewLoader = new FXMLLoader(getClass().getResource("/fxml/menuView.fxml"));
+
+                Parent root = menuViewLoader.load();
+
+                stage.setTitle("Towers of Hanoi");
+                stage.setScene(new Scene(root, 500, 260));
+                stage.centerOnScreen();
+                stage.show();
+            } catch (IOException ex) {
+                System.out.println("Load FXML exception: " + ex.getMessage());
+                ex.printStackTrace();
+            }
         });
     }
 

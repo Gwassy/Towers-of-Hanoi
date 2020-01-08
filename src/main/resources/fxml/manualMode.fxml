@@ -1,12 +1,14 @@
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.StackPane?>
-
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
 <BorderPane fx:controller="view.manual.ManualModeController" xmlns:fx="http://javafx.com/fxml">
+    <padding>
+        <Insets top="50" left="100"/>
+    </padding>
+    <top>
+        <Button fx:id="exitGameButton" text="Quit to main menu"/>
+    </top>
     <bottom>
         <GridPane>
             <padding>
