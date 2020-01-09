@@ -1,5 +1,7 @@
 package view.automatic;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -7,8 +9,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import model.DataModel;
 import model.Disk;
 import model.Tower;
@@ -25,6 +29,9 @@ public class AutomaticModeController {
     Button exitGameButton;
 
     @FXML
+    Label timerLabel;
+
+    @FXML
     VBox leftVBox;
 
     @FXML
@@ -32,6 +39,10 @@ public class AutomaticModeController {
 
     @FXML
     VBox rightVBox;
+
+    // Used for recording time in seconds (since the
+    // game was started).
+    public static int time = 0;
 
     /**
      * This function is used to initialize the DataModel.
@@ -55,28 +66,47 @@ public class AutomaticModeController {
         Tower middleTower = model.getMiddleTower();
         Tower rightTower = model.getRightTower();
 
+        // This thread is called every one second and it updates
+        // the time duration of the game in the timerLabel.
+        Timeline timer = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            AutomaticModeController.time++;
+            timerLabel.setText("" + formatDuration(AutomaticModeController.time));
+        }));
+
         // Inner class that provides a task which can be used by the background thread
         // that updates the UI
         class TowersOfHanoiTask extends Task<Void> {
             @Override
             protected Void call() throws Exception {
                 TowerOfHanoi(model.getNrOfDisks(), leftTower, middleTower, rightTower);
+                timer.stop();
                 return null;
             }
         }
 
         startButton.setOnMousePressed(event -> {
+            // Create the thread where the puzzle will be
+            // solved automatically
             TowersOfHanoiTask task = new TowersOfHanoiTask();
             Thread backgroundThread = new Thread(task);
 
+            // Start the thread
             backgroundThread.setDaemon(true);
             backgroundThread.start();
+
+            // Start the timer
+            timer.setCycleCount(Timeline.INDEFINITE);
+            timer.play();
         });
 
         exitGameButton.setOnMousePressed(event -> {
             Stage stage;
             Button button = (Button) event.getSource();
             stage = (Stage) button.getScene().getWindow();
+
+            // Reset the time and stop the timer
+            AutomaticModeController.time = 0;
+            timer.stop();
 
             try {
                 FXMLLoader menuViewLoader = new FXMLLoader(getClass().getResource("/fxml/menuView.fxml"));
@@ -296,5 +326,21 @@ public class AutomaticModeController {
 
         topDisk.setTranslateX(translateDiskOnX);
         topDisk.setTranslateY(translateDiskOnY);
+    }
+
+    /**
+     * Returns a formatted string that contains the
+     * hours, minutes and seconds that have elapsed
+     * since the game was started.
+     *
+     * @param seconds the total number of seconds
+     * @return the formatted string: h:mm:ss
+     */
+    private static String formatDuration(long seconds) {
+        return String.format(
+                "%d:%02d:%02d",
+                seconds / 3600,
+                (seconds % 3600) / 60,
+                seconds % 60);
     }
 }

@@ -1,5 +1,7 @@
 package view.manual;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,11 +11,14 @@ import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import model.DataModel;
 import model.Disk;
 import model.Tower;
+import view.automatic.AutomaticModeController;
 
 import java.io.IOException;
 
@@ -22,6 +27,9 @@ public class ManualModeController {
 
     @FXML
     Button exitGameButton;
+
+    @FXML
+    Label timerLabel;
 
     @FXML
     VBox leftVBox;
@@ -36,6 +44,9 @@ public class ManualModeController {
     private Bounds leftVBoxBounds;
     private Bounds middleVBoxBounds;
     private Bounds rightVBoxBounds;
+
+    // Used for keeping track of the game duration
+    private Timeline timer;
 
     /**
      * Used to initialize the DataModel.
@@ -60,6 +71,17 @@ public class ManualModeController {
         addEventHandlersForVBox(leftVBox);
         addEventHandlersForVBox(middleVBox);
         addEventHandlersForVBox(rightVBox);
+
+        // This thread is called every one second and it updates
+        // the time duration of the game in the timerLabel.
+        timer = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            AutomaticModeController.time++;
+            timerLabel.setText("" + formatDuration(AutomaticModeController.time));
+        }));
+
+        // Start the timer
+        timer.setCycleCount(Timeline.INDEFINITE);
+        timer.play();
 
         exitGameButton.setOnMousePressed(event -> {
             Stage stage;
@@ -456,6 +478,12 @@ public class ManualModeController {
             middleVBox.setMouseTransparent(true);
             leftVBox.setMouseTransparent(true);
             rightVBox.setMouseTransparent(true);
+
+            // If the game is finished stop the timer
+            if (isGameFinished()) {
+                timer.stop();
+                AutomaticModeController.time = 0;
+            }
         });
     }
 
@@ -482,5 +510,54 @@ public class ManualModeController {
         }
 
         return true;
+    }
+
+    /**
+     * Returns a formatted string that contains the
+     * hours, minutes and seconds that have elapsed
+     * since the game was started.
+     *
+     * @param seconds the total number of seconds
+     * @return the formatted string: h:mm:ss
+     */
+    private static String formatDuration(long seconds) {
+        return String.format(
+                "%d:%02d:%02d",
+                seconds / 3600,
+                (seconds % 3600) / 60,
+                seconds % 60);
+    }
+
+    /**
+     * The game is finished if the left tower is
+     * empty and if only one of the disks in
+     * the game is draggable.
+     *
+     * @return true if the game is finished
+     *         false otherwise
+     */
+    private boolean isGameFinished() {
+        Tower leftTower = model.getLeftTower();
+        Tower middleTower = model.getMiddleTower();
+        Tower rightTower = model.getRightTower();
+        ObservableList<Disk> disksOnLeftTower = leftTower.getDisksOnTower();
+        ObservableList<Disk> disksOnMiddleTower = middleTower.getDisksOnTower();
+        ObservableList<Disk> disksOnRightTower = rightTower.getDisksOnTower();
+        int count = 0;
+
+        if (disksOnLeftTower.isEmpty()) {
+            for (Disk disk : disksOnMiddleTower) {
+                if (disk.isDraggable()) {
+                    count++;
+                }
+            }
+            for (Disk disk : disksOnRightTower) {
+                if (disk.isDraggable()) {
+                    count++;
+                }
+            }
+        }
+
+        return count == 1;
     }
 }
